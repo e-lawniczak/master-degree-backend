@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ClothBackend")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0d563f140fadbb7be16d7a798c3539ef5e4dd4f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ebb3c7772fe3efcaacfdcfee9c4c5a8dd38fd0be")]
 [assembly: System.Reflection.AssemblyProductAttribute("ClothBackend")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ClothBackend")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

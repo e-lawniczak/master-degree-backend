@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClothBackend.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/hello")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
