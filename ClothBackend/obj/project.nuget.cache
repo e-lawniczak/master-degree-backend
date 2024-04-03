@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "jPYY2Kw4riW2Gb29PGtoOvWmJD7l4eKBkSc5Y8IqYvJaz3DdvRUh0qeVAVGfbTzZKihJ3e9UEpzviYUwcyTXbw==",
+  "dgSpecHash": "OEbbmspLCwwj1eze/+zwDStEKm3JC2j9p/rCG3xdsoXT/Z0BHK0V6VtR5D+OOYGn+zvRQiEUsvHzvIFNSQBn5A==",
   "success": true,
-  "projectFilePath": "C:\\erykLocal\\master-degree-backend\\ClothBackend\\ClothBackend.csproj",
+  "projectFilePath": "Z:\\_EŁ\\magisterka\\ClothBackend\\ClothBackend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\eławniczak\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\eławniczak\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",

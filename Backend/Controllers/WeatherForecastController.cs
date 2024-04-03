@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClothBackend.Controllers
+namespace Backend.Controllers
 {
     [ApiController]
-    [Route("api/hello/")]
+    [Route("/api/")]
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
@@ -22,13 +22,7 @@ namespace ClothBackend.Controllers
         [Route("1")]
         public JsonResult Get()
         {
-            return new JsonResult(Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray());
+            return new JsonResult("hello");
         }
     }
 }
