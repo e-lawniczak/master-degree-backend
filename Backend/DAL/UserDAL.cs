@@ -42,7 +42,7 @@ namespace ClothBackend.DAL
             if (hash != eduUser.Password)
                 throw new UnauthorizedAccessException("Wrong email or password");
             string jwtSecurityToken = await GenerateToken(eduUser);
-            await SaveJwtToken(jwtSecurityToken, eduUser.UserId);
+            //await SaveJwtToken(jwtSecurityToken, eduUser.UserId);
 
             AuthenticationResponse response = new AuthenticationResponse
             {
@@ -163,8 +163,8 @@ namespace ClothBackend.DAL
             item["Password"] = user.Password;
             item["Email"] = user?.Email ?? "";
             item["IsControlGroup"] = num % 2 == 0;
-            item["FirstLogin"] = false;
-            item["CurrentPlaytrough"] = null;
+            item["FirstLogin"] = true;
+            item["CurrentPlaytrough"] = DBNull.Value;
             item["Attempts"] = 0;
             item["Deaths"] = 0;
             item["HighScore"] = 0;
