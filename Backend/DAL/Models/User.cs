@@ -8,7 +8,7 @@
         public string Email { get; set; }
         public bool IsControlGroup { get; set; }
         public bool FirstLogin { get; set; }
-        public int CurrentPlaytrough { get; set; }
+        public int? CurrentPlaytrough { get; set; }
         public int Attempts { get; set; }
         public int Deaths { get; set; }
         public int HighScore { get; set; }

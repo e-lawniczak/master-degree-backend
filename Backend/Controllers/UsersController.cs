@@ -10,12 +10,10 @@ namespace ClothBackend.Controllers
     {
         [HttpGet]
         [Route("all")]
-        public JsonResult GetAllUsers()
+        [Authorize]
+        public async Task<JsonResult> GetAllUsers()
         {
-            var users = UserDAL.UserList();
-            if (users == null)
-                return new JsonResult("Error");
-            return new JsonResult(users);
+            return Json("Authorized");
         }
     }
 }
