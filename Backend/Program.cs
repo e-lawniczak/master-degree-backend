@@ -13,6 +13,8 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 var congfig = builder.Configuration;
 // Add services to the container.
+var itchIo = "_itchIoOrigins";
+var open = "_openOrigins";
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -51,8 +53,13 @@ builder.Services.AddSwaggerGen(swg =>
 });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Open",
-        builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+    options.AddDefaultPolicy( policy => 
+    policy
+    //.WithOrigins("https://html-classic.itch.zone/")
+    .AllowAnyOrigin()
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    );
 });
 builder.Services.AddDbContext<DbContext>(opt => opt.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnectionString")
@@ -91,6 +98,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 

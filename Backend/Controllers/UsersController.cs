@@ -10,7 +10,7 @@ namespace ClothBackend.Controllers
     public class UsersController : Controller
     {
         [HttpGet]
-        [Route("getuserData/{playerId}")]
+        [Route("getUserData/{playerId}")]
         [Authorize]
         public async Task<IActionResult> GetAllUsers(int playerId)
         {

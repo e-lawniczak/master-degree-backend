@@ -118,10 +118,10 @@ namespace ClothBackend.DAL
             if (request == null)
                 throw new Exception("Request is null");
 
-            if (request.UserName == null || request.UserName.Length <=0)
+            if (request.UserName == null || request.UserName.Length <= 0)
                 throw new Exception("Please enter valid username");
 
-            if (request.Password == null || request.Password.Length <= 8)
+            if (request.Password == null || request.Password.Length < 8)
                 throw new Exception("Please enter valid password. At least 8 characters long");
 
             if (request == null)
@@ -131,7 +131,7 @@ namespace ClothBackend.DAL
             //    throw new Exception($"Accept all agreements");
 
             var existing = await FindByUserNameAsync(request?.Email ?? "");
-            
+
             if (existing != null)
                 throw new Exception($"User {request?.UserName} already exists.");
 
