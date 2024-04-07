@@ -32,7 +32,11 @@ namespace ClothBackend.DAL
 
         #region Methods
 
-
+        public async Task<User> GetPlayerStats(int playerId)
+        {
+            var user = await FindByUserIdAsync(playerId);
+            return user;
+        }
         public async Task<AuthenticationResponse> LoginAsync(UserLogin request)
         {
             if (request.UserName == null || request.UserName.Length <= 0)
@@ -50,10 +54,10 @@ namespace ClothBackend.DAL
             var eduUser = await FindByUserNameAsync(request?.UserName ?? "");
 
             if (eduUser == null)
-                throw new Exception("Not found user with given email");
+                throw new Exception("Not found user with given user name");
             var hash = BCrypt.Net.BCrypt.HashPassword(request?.Password, System.Configuration.ConfigurationManager.AppSettings["Salt"]);
             if (hash != eduUser.Password)
-                throw new UnauthorizedAccessException("Wrong email or password");
+                throw new UnauthorizedAccessException("Wrong user name or password");
             string jwtSecurityToken = await GenerateToken(eduUser);
             //await SaveJwtToken(jwtSecurityToken, eduUser.UserId);
 
@@ -220,6 +224,31 @@ namespace ClothBackend.DAL
             string escapedName = Regex.Escape(userName);
             var cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("userName", escapedName);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            da.Fill(dataTable);
+            if (dataTable.Rows.Count <= 0)
+                return null;
+            var item = dataTable.Rows[0];
+            return new User
+            {
+                UserId = Convert.ToInt32(item["UserId"]),
+                UserName = Convert.ToString(item["UserName"]),
+                Password = Convert.ToString(item["Password"]),
+                Email = Convert.ToString(item["Email"]),
+                IsControlGroup = Convert.ToBoolean(item["IsControlGroup"]),
+                FirstLogin = Convert.ToBoolean(item["FirstLogin"]),
+                CurrentPlaytrough = DBNull.Value.Equals(item["CurrentPlaytrough"]) ? null : Convert.ToInt32(item["CurrentPlaytrough"]),
+                Attempts = Convert.ToInt32(item["Attempts"]),
+                Deaths = Convert.ToInt32(item["Deaths"]),
+                HighScore = Convert.ToInt32(item["HighScore"]),
+            };
+        }
+        public async Task<User> FindByUserIdAsync(int userId)
+        {
+            string query = $"SELECT * FROM Users WHERE UserId = @userId";
+            var cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userId", userId);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
             da.Fill(dataTable);

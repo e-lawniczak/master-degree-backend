@@ -38,7 +38,7 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Msg = ex.Message, Inner = ex.InnerException});
+                return BadRequest(ex.Message);
             }
 
 
