@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using PizzeriaAPI.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
 
@@ -17,7 +18,7 @@ namespace ClothBackend.Controllers
     {
         [HttpPost]
         [Route("credentials")]
-        public async Task<JsonResult> Login(UserLogin request)
+        public async Task<IActionResult> Login(UserLogin request)
         {
             try
             {
@@ -32,12 +33,12 @@ namespace ClothBackend.Controllers
                 else
                 {
                     res = await ud.RegisterAsync(request);
-                }
-                return Json(res);
+                };
+                return Ok(res);
             }
             catch (Exception ex)
             {
-                return new JsonResult(new { Msg=ex.Message, inner=ex.InnerException });
+                return BadRequest(new { Msg = ex.Message, Inner = ex.InnerException});
             }
 
 

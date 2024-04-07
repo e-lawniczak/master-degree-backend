@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using ClothBackend.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace ClothBackend.DAL
 {
@@ -34,6 +35,18 @@ namespace ClothBackend.DAL
 
         public async Task<AuthenticationResponse> LoginAsync(UserLogin request)
         {
+            if (request.UserName == null || request.UserName.Length <= 0)
+                throw new Exception("Please enter valid username");
+
+            if (request.Password == null || request.Password.Length < 8)
+                throw new Exception("Please enter valid password. At least 8 characters long");
+
+            if (request == null)
+                throw new Exception("Request is null");
+
+            //if (request.Agree1 == false || request.Agree2 == false || request.Agree3 == false)
+            //    throw new Exception($"Accept all agreements");
+
             var eduUser = await FindByUserNameAsync(request?.UserName ?? "");
 
             if (eduUser == null)
@@ -56,7 +69,7 @@ namespace ClothBackend.DAL
             return response;
         }
 
-      
+
 
         private async Task<string> GenerateToken(User user)
         {
@@ -82,7 +95,7 @@ namespace ClothBackend.DAL
             };
             var token = tokenHandler.CreateToken(tokenDescriptior);
 
-           
+
             return tokenHandler.WriteToken(token);
         }
 
@@ -100,17 +113,35 @@ namespace ClothBackend.DAL
         {
             if (request == null)
                 throw new Exception("Request is null");
-            var existing = await FindByUserNameAsync(request?.Email ?? "");
 
+            if (request.UserName == null || request.UserName.Length <=0)
+                throw new Exception("Please enter valid username");
+
+            if (request.Password == null || request.Password.Length <= 8)
+                throw new Exception("Please enter valid password. At least 8 characters long");
+
+            if (request == null)
+                throw new Exception("Request is null");
+
+            //if (request.Agree1 == false || request.Agree2 == false || request.Agree3 == false)
+            //    throw new Exception($"Accept all agreements");
+
+            var existing = await FindByUserNameAsync(request?.Email ?? "");
+            
             if (existing != null)
                 throw new Exception($"User {request?.UserName} already exists.");
 
+
             var hashPassword = BCrypt.Net.BCrypt.HashPassword(request?.Password, System.Configuration.ConfigurationManager.AppSettings["Salt"]);
-            var user = new User
+            var user = new UserLogin
             {
                 UserName = request.UserName,
                 Email = request?.Email ?? "",
-                Password = hashPassword
+                Password = hashPassword,
+                Agree1 = request?.Agree1 ?? false,
+                Agree2 = request?.Agree2 ?? false,
+                Agree3 = request?.Agree3 ?? false
+
             };
 
             var result = await CreateAsync(user, request?.Password ?? "");
@@ -130,7 +161,7 @@ namespace ClothBackend.DAL
         #endregion
         #region DB Queries
 
-        private async Task SaveJwtToken( string token, int userId)
+        private async Task SaveJwtToken(string token, int userId)
         {
             SqlDataAdapter da = new SqlDataAdapter($"SELECT * FROM Tokens WHERE 0 = 1", con);
             DataTable dataTable = new DataTable();
@@ -147,9 +178,9 @@ namespace ClothBackend.DAL
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);
             var rows = da.Update(dataTable);
-           
+
         }
-        private async Task<bool> CreateAsync(User user, string password)
+        private async Task<bool> CreateAsync(UserLogin user, string password)
         {
             SqlDataAdapter da = new SqlDataAdapter($"SELECT * FROM Users WHERE 0 = 1", con);
             DataTable dataTable = new DataTable();
@@ -168,11 +199,14 @@ namespace ClothBackend.DAL
             item["Attempts"] = 0;
             item["Deaths"] = 0;
             item["HighScore"] = 0;
+            //item["Agreement1"] = user.Agree1;
+            //item["Agreement2"] = user.Agree2;
+            //item["Agreement3"] = user.Agree3;
 
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);
-            var rows =  da.Update(dataTable);
-            if(rows == 0)
+            var rows = da.Update(dataTable);
+            if (rows == 0)
             {
                 return false;
             }
@@ -182,8 +216,11 @@ namespace ClothBackend.DAL
 
         public async Task<User> FindByUserNameAsync(string userName)
         {
-            string query = $"SELECT * FROM Users WHERE UserName = '{userName}'";
-            SqlDataAdapter da = new SqlDataAdapter(query, con);
+            string query = $"SELECT * FROM Users WHERE UserName = @userName";
+            string escapedName = Regex.Escape(userName);
+            var cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userName", escapedName);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
             da.Fill(dataTable);
             if (dataTable.Rows.Count <= 0)

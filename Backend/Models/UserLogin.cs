@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
+using System.Runtime.Serialization;
 
 namespace ClothBackend.Models
 {
@@ -11,7 +13,11 @@ namespace ClothBackend.Models
         [Required]
         [PasswordPropertyText]
         public string Password { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
+        
+        public bool? Agree1 {  get; set; }
+        public bool? Agree2 {  get; set; }
+        public bool? Agree3 {  get; set; }
 
     }
 }
