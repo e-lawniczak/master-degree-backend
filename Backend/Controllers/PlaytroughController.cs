@@ -2,6 +2,7 @@
 using ClothBackend.Models;
 using ClothBackend.Models.Checkpoint;
 using ClothBackend.Models.Playtrough;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClothBackend.Controllers
@@ -14,6 +15,7 @@ namespace ClothBackend.Controllers
 
         [HttpGet]
         [Route("getInitial/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetInitialData(int id)
         {
             try
@@ -29,6 +31,7 @@ namespace ClothBackend.Controllers
         }
         [HttpGet]
         [Route("getPlaytrough/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetPlaytrough(int id)
         {
             try
@@ -44,6 +47,7 @@ namespace ClothBackend.Controllers
         }
         [HttpPost]
         [Route("updatePlaytrough")]
+        [Authorize]
         public async Task<IActionResult> UpdatePlaytrough(PlaytroughRequest playtrough)
         {
             try
@@ -64,6 +68,7 @@ namespace ClothBackend.Controllers
         }
         [HttpGet]
         [Route("getCheckpoint/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCheckpoint(int id)
         {
             try
@@ -80,6 +85,7 @@ namespace ClothBackend.Controllers
 
         [HttpPost]
         [Route("saveCheckpoint/{id}")]
+        [Authorize]
         public async Task<IActionResult> SaveCheckpoint(CheckpointRequest checkpoint)
         {
             try

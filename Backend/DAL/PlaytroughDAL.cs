@@ -209,7 +209,7 @@ namespace ClothBackend.DAL
             item["UserId"] = playtrough.UserId;
             item["StartTime"] = DateTime.UtcNow;
             item["EndTime"] = DBNull.Value;
-            item["LastUpdate"] = playtrough.LastUpdate;
+            item["LastUpdate"] = DBNull.Value;
 
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);
