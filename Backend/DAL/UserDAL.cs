@@ -37,6 +37,19 @@ namespace ClothBackend.DAL
             var user = await FindByUserIdAsync(playerId);
             return user;
         }
+        public async Task<bool> UpdateMetrics(FirstLoginMetricsRequest data)
+        {
+            var user = await FindByUserIdAsync(data.UserId);
+            if (user == null)
+                throw new Exception("User not found");
+
+            bool succeded = await UpdateMetricsQuery(data, user);
+
+            return succeded;
+        }
+
+
+
         public async Task<AuthenticationResponse> LoginAsync(UserLogin request)
         {
             if (request.UserName == null || request.UserName.Length <= 0)
@@ -51,7 +64,7 @@ namespace ClothBackend.DAL
             //if (request.Agree1 == false || request.Agree2 == false || request.Agree3 == false)
             //    throw new Exception($"Accept all agreements");
 
-            var eduUser = await FindByUserNameAsync(request?.UserName ?? "");
+            var eduUser = await FindByUserNameAsync(request.UserName);
 
             if (eduUser == null)
                 throw new Exception("Not found user with given user name");
@@ -164,7 +177,50 @@ namespace ClothBackend.DAL
 
         #endregion
         #region DB Queries
+        private async Task<bool> UpdateMetricsQuery(FirstLoginMetricsRequest data, User user)
+        {
+            string query = $"SELECT * FROM Metrics WHERE 1 = 0";
+            var cmd = new SqlCommand(query, con);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            da.Fill(dataTable);
+            
 
+            var item = dataTable.NewRow();
+            item["Country"] = data.Country;
+            item["Age"] = Convert.ToInt32(data.Age);
+            item["Gender"] = data.Gender;
+            item["GamesExperience"] = data.GamesExperience;
+            item["Education"] = data.Education;
+            item["DemographicBackground"] = data.DemographicBackground;
+            item["UserId"] = user.UserId;
+
+            new SqlCommandBuilder(da);
+            dataTable.Rows.Add(item);
+            var rows = da.Update(dataTable); 
+
+
+            if( rows ==0)
+                throw new Exception("Metrics not saved");
+
+            query = $"SELECT * FROM Users WHERE UserId = @userId";
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userId", user.UserId);
+            da = new SqlDataAdapter(cmd);
+            dataTable = new DataTable();
+            da.Fill(dataTable);
+
+            if (rows == 0)
+                throw new Exception("User not found");
+
+            item = dataTable.Rows[0];
+            item["FirstLogin"] = 0;
+
+            new SqlCommandBuilder(da);
+            rows = da.Update(dataTable);
+
+            return rows > 0;
+        }
         private async Task SaveJwtToken(string token, int userId)
         {
             SqlDataAdapter da = new SqlDataAdapter($"SELECT * FROM Tokens WHERE 0 = 1", con);

@@ -40,5 +40,27 @@ namespace ClothBackend.Controllers
 
 
         }
+        
+        [HttpPost]
+        [Route("updateMetrics")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMetrics(FirstLoginMetricsRequest firstLogin)
+        {
+            try
+            {
+                var ud = new UserDAL();
+                var res = await ud.UpdateMetrics(firstLogin);
+
+               
+
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+        }
     }
 }
