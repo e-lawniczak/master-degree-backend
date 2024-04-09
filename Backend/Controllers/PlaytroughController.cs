@@ -42,7 +42,7 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + "\n\n" + ex.InnerException + "\n\n" + ex.StackTrace);
             }
         }
         [HttpPost]
@@ -63,7 +63,7 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex.Message + "\n\n" + ex.InnerException + "\n\n" + ex.StackTrace);
             }
         }
         [HttpGet]

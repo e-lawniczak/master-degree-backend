@@ -80,6 +80,7 @@ namespace ClothBackend.DAL
             if (checkpoint.PlaytroughId < 1) throw new Exception("Error saving chekpoint");
 
             string query = $"DELETE * FROM Checkpoints WHERE PlaytroughId = @playtroughId";
+            con.Open();
             var cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("playtroughId", checkpoint.PlaytroughId);
             cmd.ExecuteNonQuery();
@@ -125,7 +126,6 @@ namespace ClothBackend.DAL
                 throw new Exception("Playtrough does not exist");
             var item = dataTable.Rows[0];
 
-            item["PlaytroughId"] = playtrough.PlaytroughId;
             item["TotalTime"] = playtrough.TotalTime;
             item["TotalPoints"] = playtrough.TotalPoints;
             item["CoinsCollected"] = playtrough.CoinsCollected;
@@ -156,10 +156,11 @@ namespace ClothBackend.DAL
             item["LevelEndHp_3"] = playtrough.LevelEndHp_3;
             item["UserId"] = playtrough.UserId;
             item["StartTime"] = playtrough.StartTime;
-            item["EndTime"] = playtrough.EndTime;
-            item["LastUpdate"] = playtrough.LastUpdate;
+            item["EndTime"] = playtrough.EndTime.HasValue ? playtrough.EndTime : DBNull.Value;
+            item["LastUpdate"] = DateTime.UtcNow;
 
             new SqlCommandBuilder(da);
+
             var rows = da.Update(dataTable);
             if (rows == 0)
             {
@@ -209,7 +210,7 @@ namespace ClothBackend.DAL
             item["UserId"] = playtrough.UserId;
             item["StartTime"] = DateTime.UtcNow;
             item["EndTime"] = DBNull.Value;
-            item["LastUpdate"] = DBNull.Value;
+            item["LastUpdate"] = DateTime.UtcNow;
 
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);
@@ -219,14 +220,28 @@ namespace ClothBackend.DAL
                 throw new Exception("Playtrough not created");
             }
 
+
+
             string query = $"SELECT TOP 1 PlaytroughId FROM Playtroughs WHERE UserId = @userId ORDER By PlaytroughId desc";
             var cmd = new SqlCommand(query, con);
             cmd.Parameters.AddWithValue("userId", playtrough.UserId);
             da = new SqlDataAdapter(cmd);
             dataTable = new DataTable();
             da.Fill(dataTable);
+            var newPlaytroughId = dataTable.Rows[0]["PlaytroughId"];
 
-            return Convert.ToInt32(dataTable.Rows[0]["PlaytroughId"]);
+            query = $"UPDATE Users" +
+                $"SET Attempts = Users.Attempts + 1" +
+                $"WHERE UserId = @userId";
+            cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userId", playtrough.UserId);
+            rows = cmd.ExecuteNonQuery();
+            if (rows != 1)
+            {
+                throw new Exception("Something went wrong when updateing user attempts");
+            }
+
+            return Convert.ToInt32(newPlaytroughId);
         }
 
         public async Task<PlaytroughResponse> FindPlaytroughById(int pId)
