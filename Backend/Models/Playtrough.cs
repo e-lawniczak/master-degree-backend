@@ -76,8 +76,8 @@ namespace ClothBackend.Models.Playtrough
         public int? LevelDeaths_3 { get; set; }
         public int? LevelEndHp_3 { get; set; }
         public int UserId { get; set; }
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
-        public DateTime? LastUpdate { get; set; }
+        public long StartTime { get; set; }
+        public long EndTime { get; set; }
+        public long LastUpdate { get; set; }
     }
 }

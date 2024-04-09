@@ -155,8 +155,8 @@ namespace ClothBackend.DAL
             item["LevelDeaths_3"] = playtrough.LevelDeaths_3;
             item["LevelEndHp_3"] = playtrough.LevelEndHp_3;
             item["UserId"] = playtrough.UserId;
-            item["StartTime"] = playtrough.StartTime;
-            item["EndTime"] = playtrough.EndTime.HasValue ? playtrough.EndTime : DBNull.Value;
+            item["StartTime"] = new DateTime(Convert.ToInt64(playtrough.StartTime));
+            item["EndTime"] = Convert.ToInt64(playtrough.EndTime) != 0 ? new DateTime(Convert.ToInt64(playtrough.EndTime)) : DBNull.Value;
             item["LastUpdate"] = DateTime.UtcNow;
 
             new SqlCommandBuilder(da);
@@ -230,12 +230,20 @@ namespace ClothBackend.DAL
             da.Fill(dataTable);
             var newPlaytroughId = dataTable.Rows[0]["PlaytroughId"];
 
-            query = $"UPDATE Users" +
-                $"SET Attempts = Users.Attempts + 1" +
-                $"WHERE UserId = @userId";
-            cmd = new SqlCommand(query, con);
-            cmd.Parameters.AddWithValue("userId", playtrough.UserId);
-            rows = cmd.ExecuteNonQuery();
+            query = $"Select * FROM Users WHERE UserId = @userId";
+            da = new SqlDataAdapter(query, con);
+            da.SelectCommand.Parameters.AddWithValue("userId", playtrough.UserId);
+            dataTable = new DataTable();
+            da.Fill(dataTable);
+
+            da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
+            if(dataTable.Rows.Count > 0)
+            {
+                DataRow dr = dataTable.Rows[0];
+                dr["Attempts"] = Convert.ToInt32(dr["Attempts"]) + 1;
+            }
+            rows = da.Update(dataTable);
+
             if (rows != 1)
             {
                 throw new Exception("Something went wrong when updateing user attempts");
