@@ -26,7 +26,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
         }
         [HttpGet]
@@ -42,7 +45,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message + "\n\n" + ex.InnerException + "\n\n" + ex.StackTrace);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
         }
         [HttpPost]
@@ -63,7 +69,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message + "\n\n" + ex.InnerException + "\n\n" + ex.StackTrace);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
         }
         [HttpGet]
@@ -79,7 +88,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
         }
 
@@ -97,7 +109,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
         }
 

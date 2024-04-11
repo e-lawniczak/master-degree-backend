@@ -75,6 +75,22 @@ namespace ClothBackend.DAL
             return res;
         }
 
+        private async Task<bool> DeleteCheckpoint(CheckpointRequest checkpoint)
+        {
+            if (checkpoint.PlaytroughId < 1) throw new Exception("Error saving chekpoint");
+
+            string query = $"DELETE * FROM Checkpoints WHERE PlaytroughId = @playtroughId";
+            con.Open();
+            var cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("playtroughId", checkpoint.PlaytroughId);
+            var rows = cmd.ExecuteNonQuery();
+            if (rows == 0)
+            {
+                throw new Exception("No rows deleted");
+            }
+            return true;
+
+        }
         private async Task<bool> Checkpoint(CheckpointRequest checkpoint)
         {
             if (checkpoint.PlaytroughId < 1) throw new Exception("Error saving chekpoint");
@@ -102,6 +118,7 @@ namespace ClothBackend.DAL
             item["CollectedCoinsIds"] = checkpoint.CollectedCoinsIds;
             item["PlaytroughId"] = checkpoint.PlaytroughId;
             item["Date"] = DateTime.Now;
+            item["Points"] = checkpoint.Points;
 
             new SqlCommandBuilder(da);
             var rows = da.Update(dataTable);
@@ -237,7 +254,7 @@ namespace ClothBackend.DAL
             da.Fill(dataTable);
 
             da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
-            if(dataTable.Rows.Count > 0)
+            if (dataTable.Rows.Count > 0)
             {
                 DataRow dr = dataTable.Rows[0];
                 dr["Attempts"] = Convert.ToInt32(dr["Attempts"]) + 1;
@@ -322,10 +339,11 @@ namespace ClothBackend.DAL
                 PlayerPosX = Convert.ToInt32(item["PlayerPosX"]),
                 PlayerPosY = Convert.ToInt32(item["PlayerPosY"]),
                 Health = Convert.ToInt32(item["Health"]),
-                DefeatedEnemiesIds = Convert.ToString(item["DefeatedEnemiesIds"]).Split().Select(s => Int32.Parse(s)).ToList(),
-                CollectedCoinsIds = Convert.ToString(item["CollectedCoinsIds"]).Split().Select(s => Int32.Parse(s)).ToList(),
+                DefeatedEnemiesIds = Convert.ToString(item["DefeatedEnemiesIds"]).Split().Select(s => Int32.Parse(s)).ToArray(),
+                CollectedCoinsIds = Convert.ToString(item["CollectedCoinsIds"]).Split().Select(s => Int32.Parse(s)).ToArray(),
                 PlaytroughId = Convert.ToInt32(item["PlaytroughId"]),
                 Date = (DateTime)(item["Date"]),
+                Points = Convert.ToInt32(item["Points"])
 
             };
         }

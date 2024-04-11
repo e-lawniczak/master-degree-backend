@@ -35,7 +35,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
 
 
@@ -57,7 +60,10 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
             }
 
 
