@@ -184,6 +184,34 @@ namespace ClothBackend.DAL
                 throw new Exception("Playtrough does not exist");
             }
 
+            // add deaths and highscore
+            if (Convert.ToInt64(playtrough.EndTime) != 0)
+            {
+                query = $"Select * FROM Users WHERE UserId = @userId";
+                da = new SqlDataAdapter(query, con);
+                da.SelectCommand.Parameters.AddWithValue("userId", playtrough.UserId);
+                dataTable = new DataTable();
+                da.Fill(dataTable);
+
+                da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow dr = dataTable.Rows[0];
+                    dr["Deaths"] = Convert.ToInt32(dr["Deaths"]) + playtrough.Deaths;
+                }
+                rows = da.Update(dataTable);
+
+                if (rows != 1)
+                {
+                    throw new Exception("Something went wrong when updateing user Deaths");
+                }
+                var update = await new UserDAL().UpdateHighScore(Convert.ToInt32(dataTable.Rows[0]["HighScore"]), playtrough.Score);
+                if (!update)
+                {
+                    throw new Exception("Something went wrong when updating player score");
+                }
+            }
+
             return playtrough.PlaytroughId;
         }
 
@@ -253,6 +281,8 @@ namespace ClothBackend.DAL
             dataTable = new DataTable();
             da.Fill(dataTable);
 
+            // add attempts
+
             da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
             if (dataTable.Rows.Count > 0)
             {
@@ -264,6 +294,34 @@ namespace ClothBackend.DAL
             if (rows != 1)
             {
                 throw new Exception("Something went wrong when updateing user attempts");
+            }
+
+            // add deaths and highscore
+            if (Convert.ToInt64(playtrough.EndTime) != 0)
+            {
+                query = $"Select * FROM Users WHERE UserId = @userId";
+                da = new SqlDataAdapter(query, con);
+                da.SelectCommand.Parameters.AddWithValue("userId", playtrough.UserId);
+                dataTable = new DataTable();
+                da.Fill(dataTable);
+
+                da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
+                if (dataTable.Rows.Count > 0)
+                {
+                    DataRow dr = dataTable.Rows[0];
+                    dr["Deaths"] = Convert.ToInt32(dr["Deaths"]) + playtrough.Deaths;
+                }
+                rows = da.Update(dataTable);
+
+                if (rows != 1)
+                {
+                    throw new Exception("Something went wrong when updateing user Deaths");
+                }
+                var update = await new UserDAL().UpdateHighScore(Convert.ToInt32(dataTable.Rows[0]["HighScore"]), playtrough.Score);
+                if (!update)
+                {
+                    throw new Exception("Something went wrong when updating player score");
+                }
             }
 
             return Convert.ToInt32(newPlaytroughId);

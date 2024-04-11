@@ -31,7 +31,11 @@ namespace ClothBackend.DAL
         }
 
         #region Methods
-
+        public async Task<bool> UpdateHighScore(int userId, int score)
+        {
+            var update = await UpdateHS(userId, score);
+            return update;
+        }
         public async Task<User> GetPlayerStats(int playerId)
         {
             var user = await FindByUserIdAsync(playerId);
@@ -177,6 +181,32 @@ namespace ClothBackend.DAL
 
         #endregion
         #region DB Queries
+        private async Task<bool> UpdateHS(int userId, int newScore)
+        {
+            string query = $"SELECT * FROM Users WHERE UserId = @userId";
+            var cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userId", userId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            da.Fill(dataTable);
+
+            if (dataTable.Rows.Count <= 0)
+                throw new Exception("User does not exist");
+            var item = dataTable.Rows[0];
+
+            if (Convert.ToInt32(item["HighScore"]) < newScore)
+            {
+                item["HighScore"] = newScore;
+                var rows = da.Update(dataTable);
+                if (rows != 1)
+                {
+                    throw new Exception("Something went wrong");
+                }
+            }
+
+           
+            return true;
+        }
         private async Task<bool> UpdateMetricsQuery(FirstLoginMetricsRequest data, User user)
         {
             string query = $"SELECT * FROM Metrics WHERE 1 = 0";

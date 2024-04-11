@@ -63,18 +63,21 @@ namespace ClothBackend.Models.Playtrough
         public int? LevelCoins_1 { get; set; }
         public int? LevelDeaths_1 { get; set; }
         public int? LevelEndHp_1 { get; set; }
+        public bool LevelFinished_1 { get; set; }
         public float? LevelTime_2 { get; set; }
         public int? LevelPoints_2 { get; set; }
         public int? LevelEnemies_2 { get; set; }
         public int? LevelCoins_2 { get; set; }
         public int? LevelDeaths_2 { get; set; }
         public int? LevelEndHp_2 { get; set; }
+        public bool LevelFinished_2 { get; set; }
         public float? LevelTime_3 { get; set; }
         public int? LevelPoints_3 { get; set; }
         public int? LevelEnemies_3 { get; set; }
         public int? LevelCoins_3 { get; set; }
         public int? LevelDeaths_3 { get; set; }
         public int? LevelEndHp_3 { get; set; }
+        public bool LevelFinished_3 { get; set; }
         public int UserId { get; set; }
         public long StartTime { get; set; }
         public long EndTime { get; set; }
