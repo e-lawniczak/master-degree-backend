@@ -8,8 +8,8 @@ namespace ClothBackend.Models
 {
     public class InitialData
     {
-            public int? currentPlaytrough;
-            public int highScore;
-            public bool isControlGroup;
+        public int? currentPlaytrough { get; set; }
+        public int highScore { get; set; }
+        public bool isControlGroup { get; set; }
     }
 }

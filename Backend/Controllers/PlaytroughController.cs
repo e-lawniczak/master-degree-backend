@@ -69,52 +69,13 @@ namespace ClothBackend.Controllers
             }
             catch (Exception ex)
             {
-                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                return new JsonResult(ex.Message + "\n" + ex.InnerException + "\n" + ex.StackTrace)
                 {
                     StatusCode = 500,
                 };
             }
         }
-        [HttpGet]
-        [Route("getCheckpoint/{id}")]
-        [Authorize]
-        public async Task<IActionResult> GetCheckpoint(int id)
-        {
-            try
-            {
-                var pd = new PlaytroughDAL();
-                CheckpointResponse res = await pd.GetCheckpoint(id);
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.Message + "\n" + ex.InnerException)
-                {
-                    StatusCode = 500,
-                };
-            }
-        }
-
-        [HttpPost]
-        [Route("saveCheckpoint/{id}")]
-        [Authorize]
-        public async Task<IActionResult> SaveCheckpoint(CheckpointRequest checkpoint)
-        {
-            try
-            {
-                var pd = new PlaytroughDAL();
-                bool res = await pd.SaveCheckpoint(checkpoint);
-                if (!res) BadRequest("Something went wrong");
-                return Ok(res);
-            }
-            catch (Exception ex)
-            {
-                return new JsonResult(ex.Message + "\n" + ex.InnerException)
-                {
-                    StatusCode = 500,
-                };
-            }
-        }
+       
 
     }
 }

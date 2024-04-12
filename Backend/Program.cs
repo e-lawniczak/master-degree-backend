@@ -50,6 +50,8 @@ builder.Services.AddSwaggerGen(swg =>
             new List<string>()
           }
         });
+    swg.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+
 });
 builder.Services.AddCors(options =>
 {

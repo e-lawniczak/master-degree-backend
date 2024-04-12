@@ -11,8 +11,6 @@ using System.Threading.Tasks;
 
 namespace ClothBackend.DAL
 {
-    [ApiController]
-    [Route("/api/leaderboards")]
     public class LeaderboardsDAL
     {
         private readonly string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnectionString"].ConnectionString;
@@ -22,7 +20,7 @@ namespace ClothBackend.DAL
         {
             con = new SqlConnection(connectionString);
         }
-        public async Task<List<Leaderboards>> GetLeaderboard()
+        public async Task<List<Leaderboards>> GetLeaderboardData()
         {
             List<Leaderboards> leaderboards = GenerateLeaderboard();
             return leaderboards;

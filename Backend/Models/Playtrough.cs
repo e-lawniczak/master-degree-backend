@@ -13,7 +13,7 @@ namespace ClothBackend.Models.Playtrough
         public int? TotalPoints { get; set; }
         public int? CoinsCollected { get; set; }
         public int? EnemiesDefeated { get; set; }
-        public int? PercentageProgress { get; set; }
+        public float? PercentageProgress { get; set; }
         public int? Deaths { get; set; }
         public float TotalEnemyProxTime { get; set; }
         public float StandingStillTime { get; set; }
@@ -51,7 +51,7 @@ namespace ClothBackend.Models.Playtrough
         public int? TotalPoints { get; set; }
         public int? CoinsCollected { get; set; }
         public int? EnemiesDefeated { get; set; }
-        public int? PercentageProgress { get; set; }
+        public float? PercentageProgress { get; set; }
         public int? Deaths { get; set; }
         public float TotalEnemyProxTime { get; set; }
         public float StandingStillTime { get; set; }

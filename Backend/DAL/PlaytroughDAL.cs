@@ -143,6 +143,7 @@ namespace ClothBackend.DAL
                 throw new Exception("Playtrough does not exist");
             var item = dataTable.Rows[0];
 
+
             item["TotalTime"] = playtrough.TotalTime;
             item["TotalPoints"] = playtrough.TotalPoints;
             item["CoinsCollected"] = playtrough.CoinsCollected;
@@ -159,18 +160,21 @@ namespace ClothBackend.DAL
             item["LevelCoins_1"] = playtrough.LevelCoins_1;
             item["LevelDeaths_1"] = playtrough.LevelDeaths_1;
             item["LevelEndHp_1"] = playtrough.LevelEndHp_1;
+            item["LevelFinished_1"] = playtrough.LevelFinished_1;
             item["LevelTime_2"] = playtrough.LevelTime_2;
             item["LevelPoints_2"] = playtrough.LevelPoints_2;
             item["LevelEnemies_2"] = playtrough.LevelEnemies_2;
             item["LevelCoins_2"] = playtrough.LevelCoins_2;
             item["LevelDeaths_2"] = playtrough.LevelDeaths_2;
             item["LevelEndHp_2"] = playtrough.LevelEndHp_2;
+            item["LevelFinished_2"] = playtrough.LevelFinished_2;
             item["LevelTime_3"] = playtrough.LevelTime_3;
             item["LevelPoints_3"] = playtrough.LevelPoints_3;
             item["LevelEnemies_3"] = playtrough.LevelEnemies_3;
             item["LevelCoins_3"] = playtrough.LevelCoins_3;
             item["LevelDeaths_3"] = playtrough.LevelDeaths_3;
             item["LevelEndHp_3"] = playtrough.LevelEndHp_3;
+            item["LevelFinished_3"] = playtrough.LevelFinished_3;
             item["UserId"] = playtrough.UserId;
             item["StartTime"] = new DateTime(Convert.ToInt64(playtrough.StartTime));
             item["EndTime"] = Convert.ToInt64(playtrough.EndTime) != 0 ? new DateTime(Convert.ToInt64(playtrough.EndTime)) : DBNull.Value;
@@ -205,7 +209,7 @@ namespace ClothBackend.DAL
                 {
                     throw new Exception("Something went wrong when updateing user Deaths");
                 }
-                var update = await new UserDAL().UpdateHighScore(Convert.ToInt32(dataTable.Rows[0]["HighScore"]), playtrough.Score);
+                var update = await new UserDAL().UpdateHighScore(playtrough.UserId, playtrough.Score);
                 if (!update)
                 {
                     throw new Exception("Something went wrong when updating player score");
@@ -240,18 +244,21 @@ namespace ClothBackend.DAL
             item["LevelCoins_1"] = playtrough.LevelCoins_1;
             item["LevelDeaths_1"] = playtrough.LevelDeaths_1;
             item["LevelEndHp_1"] = playtrough.LevelEndHp_1;
+            item["LevelFinished_1"] = playtrough.LevelFinished_1;
             item["LevelTime_2"] = playtrough.LevelTime_2;
             item["LevelPoints_2"] = playtrough.LevelPoints_2;
             item["LevelEnemies_2"] = playtrough.LevelEnemies_2;
             item["LevelCoins_2"] = playtrough.LevelCoins_2;
             item["LevelDeaths_2"] = playtrough.LevelDeaths_2;
             item["LevelEndHp_2"] = playtrough.LevelEndHp_2;
+            item["LevelFinished_2"] = playtrough.LevelFinished_2;
             item["LevelTime_3"] = playtrough.LevelTime_3;
             item["LevelPoints_3"] = playtrough.LevelPoints_3;
             item["LevelEnemies_3"] = playtrough.LevelEnemies_3;
             item["LevelCoins_3"] = playtrough.LevelCoins_3;
             item["LevelDeaths_3"] = playtrough.LevelDeaths_3;
             item["LevelEndHp_3"] = playtrough.LevelEndHp_3;
+            item["LevelFinished_3"] = playtrough.LevelFinished_3;
             item["UserId"] = playtrough.UserId;
             item["StartTime"] = DateTime.UtcNow;
             item["EndTime"] = DBNull.Value;
@@ -288,8 +295,8 @@ namespace ClothBackend.DAL
             {
                 DataRow dr = dataTable.Rows[0];
                 dr["Attempts"] = Convert.ToInt32(dr["Attempts"]) + 1;
+                rows = da.Update(dataTable);
             }
-            rows = da.Update(dataTable);
 
             if (rows != 1)
             {
@@ -310,14 +317,14 @@ namespace ClothBackend.DAL
                 {
                     DataRow dr = dataTable.Rows[0];
                     dr["Deaths"] = Convert.ToInt32(dr["Deaths"]) + playtrough.Deaths;
+                    rows = da.Update(dataTable);
                 }
-                rows = da.Update(dataTable);
 
                 if (rows != 1)
                 {
                     throw new Exception("Something went wrong when updateing user Deaths");
                 }
-                var update = await new UserDAL().UpdateHighScore(Convert.ToInt32(dataTable.Rows[0]["HighScore"]), playtrough.Score);
+                var update = await new UserDAL().UpdateHighScore(playtrough.UserId, playtrough.Score);
                 if (!update)
                 {
                     throw new Exception("Something went wrong when updating player score");
@@ -346,10 +353,10 @@ namespace ClothBackend.DAL
                 TotalPoints = Convert.ToInt32(item["TotalPoints"]),
                 CoinsCollected = Convert.ToInt32(item["CoinsCollected"]),
                 EnemiesDefeated = Convert.ToInt32(item["EnemiesDefeated"]),
-                PercentageProgress = Convert.ToInt32(item["PercentageProgress"]),
+                PercentageProgress = float.Parse(item["PercentageProgress"].ToString()),
                 Deaths = Convert.ToInt32(item["Deaths"]),
-                TotalEnemyProxTime = Convert.ToInt32(item["TotalEnemyProxTime"]),
-                StandingStillTime = Convert.ToInt32(item["StandingStillTime"]),
+                TotalEnemyProxTime = float.Parse(item["TotalEnemyProxTime"].ToString()),
+                StandingStillTime = float.Parse(item["StandingStillTime"].ToString()),
                 Score = Convert.ToInt32(item["Score"]),
                 IsFinished = Convert.ToBoolean(item["IsFinished"]),
                 LevelTime_1 = Convert.ToInt32(item["LevelTime_1"]),

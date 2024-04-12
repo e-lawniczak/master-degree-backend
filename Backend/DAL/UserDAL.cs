@@ -196,7 +196,10 @@ namespace ClothBackend.DAL
 
             if (Convert.ToInt32(item["HighScore"]) < newScore)
             {
+                da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
                 item["HighScore"] = newScore;
+
+
                 var rows = da.Update(dataTable);
                 if (rows != 1)
                 {
@@ -204,7 +207,7 @@ namespace ClothBackend.DAL
                 }
             }
 
-           
+
             return true;
         }
         private async Task<bool> UpdateMetricsQuery(FirstLoginMetricsRequest data, User user)
@@ -214,7 +217,7 @@ namespace ClothBackend.DAL
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
             da.Fill(dataTable);
-            
+
 
             var item = dataTable.NewRow();
             item["Country"] = data.Country;
@@ -227,10 +230,10 @@ namespace ClothBackend.DAL
 
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);
-            var rows = da.Update(dataTable); 
+            var rows = da.Update(dataTable);
 
 
-            if( rows ==0)
+            if (rows == 0)
                 throw new Exception("Metrics not saved");
 
             query = $"SELECT * FROM Users WHERE UserId = @userId";
