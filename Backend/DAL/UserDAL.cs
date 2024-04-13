@@ -16,6 +16,7 @@ using ClothBackend.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace ClothBackend.DAL
 {
@@ -302,6 +303,25 @@ namespace ClothBackend.DAL
             if (rows == 0)
             {
                 return false;
+            }
+
+            string query = $"Select * FROM Users WHERE UserName = @userName";
+            da = new SqlDataAdapter(query, con);
+            da.SelectCommand.Parameters.AddWithValue("userName", user.UserName);
+            dataTable = new DataTable();
+            da.Fill(dataTable);
+
+            da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
+            if (dataTable.Rows.Count > 0)
+            {
+                DataRow dr = dataTable.Rows[0];
+                dr["IsControlGroup"] = Convert.ToInt32(dr["UserId"]) % 2;
+                rows = da.Update(dataTable);
+            }
+
+            if (rows != 1)
+            {
+                throw new Exception("Something went wrong when setting player control group");
             }
 
             return true;
