@@ -263,6 +263,8 @@ namespace ClothBackend.DAL
             item["StartTime"] = DateTime.UtcNow;
             item["EndTime"] = DBNull.Value;
             item["LastUpdate"] = DateTime.UtcNow;
+            item["DefeatedEnemiesIds"] = playtrough.DefeatedEnemiesIds;
+            item["CollectedCoinsIds"]= playtrough.CollectedCoinsIds;
 
             new SqlCommandBuilder(da);
             dataTable.Rows.Add(item);

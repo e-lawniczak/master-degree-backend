@@ -82,5 +82,8 @@ namespace ClothBackend.Models.Playtrough
         public long StartTime { get; set; }
         public long EndTime { get; set; }
         public long LastUpdate { get; set; }
+        public string DefeatedEnemiesIds { get; set; }
+        public string CollectedCoinsIds { get; set; }
+
     }
 }
