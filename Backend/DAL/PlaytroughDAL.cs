@@ -179,6 +179,8 @@ namespace ClothBackend.DAL
             item["StartTime"] = new DateTime(Convert.ToInt64(playtrough.StartTime));
             item["EndTime"] = Convert.ToInt64(playtrough.EndTime) != 0 ? new DateTime(Convert.ToInt64(playtrough.EndTime)) : DBNull.Value;
             item["LastUpdate"] = DateTime.UtcNow;
+            item["DefeatedEnemiesIds"] = playtrough.DefeatedEnemiesIds;
+            item["CollectedCoinsIds"] = playtrough.CollectedCoinsIds;
 
             new SqlCommandBuilder(da);
 

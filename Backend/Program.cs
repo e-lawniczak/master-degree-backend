@@ -59,13 +59,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(itchIo, builder =>
     {
         builder
-        .WithOrigins(
-            "https://html-classic.itch.zone/",
-            "https://html.itch.zone",
-            "https://*.itch.zone",
-            "https://oxygen-enjoyer.itch.io"
-            )
-        //.AllowAnyOrigin()
+        //.WithOrigins(
+        //    "https://html-classic.itch.zone/",
+        //    "https://html.itch.zone",
+        //    "https://*.itch.zone",
+        //    "https://oxygen-enjoyer.itch.io"
+        //    )
+        .AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
