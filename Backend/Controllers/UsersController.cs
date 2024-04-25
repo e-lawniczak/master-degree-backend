@@ -25,7 +25,6 @@ namespace ClothBackend.Controllers
                     email = user.Email,
                     isControlGroup = user.IsControlGroup,
                     firstLogin = user.FirstLogin,
-                    currentPlaytrough = user.CurrentPlaytrough,
                     attempts = user.Attempts,
                     deaths = user.Deaths,
                     highScore = user.HighScore

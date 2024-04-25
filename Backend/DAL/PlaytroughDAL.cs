@@ -33,7 +33,6 @@ namespace ClothBackend.DAL
             }
             return new InitialData
             {
-                currentPlaytrough = u.CurrentPlaytrough,
                 highScore = u.HighScore,
                 isControlGroup = u.IsControlGroup
             };

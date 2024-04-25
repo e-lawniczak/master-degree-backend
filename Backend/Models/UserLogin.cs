@@ -14,10 +14,7 @@ namespace ClothBackend.Models
         [PasswordPropertyText]
         public string Password { get; set; }
         public string? Email { get; set; }
-        
-        public bool? Agree1 {  get; set; }
-        public bool? Agree2 {  get; set; }
-        public bool? Agree3 {  get; set; }
+
 
     }
 }

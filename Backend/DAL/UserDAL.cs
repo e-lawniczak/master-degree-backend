@@ -160,9 +160,6 @@ namespace ClothBackend.DAL
                 UserName = request.UserName,
                 Email = request?.Email ?? "",
                 Password = hashPassword,
-                Agree1 = request?.Agree1 ?? false,
-                Agree2 = request?.Agree2 ?? false,
-                Agree3 = request?.Agree3 ?? false
 
             };
 
@@ -289,7 +286,6 @@ namespace ClothBackend.DAL
             item["Email"] = user?.Email ?? "";
             item["IsControlGroup"] = num % 2 == 0;
             item["FirstLogin"] = true;
-            item["CurrentPlaytrough"] = DBNull.Value;
             item["Attempts"] = 0;
             item["Deaths"] = 0;
             item["HighScore"] = 0;
@@ -347,7 +343,7 @@ namespace ClothBackend.DAL
                 Email = Convert.ToString(item["Email"]),
                 IsControlGroup = Convert.ToBoolean(item["IsControlGroup"]),
                 FirstLogin = Convert.ToBoolean(item["FirstLogin"]),
-                CurrentPlaytrough = DBNull.Value.Equals(item["CurrentPlaytrough"]) ? null : Convert.ToInt32(item["CurrentPlaytrough"]),
+               
                 Attempts = Convert.ToInt32(item["Attempts"]),
                 Deaths = Convert.ToInt32(item["Deaths"]),
                 HighScore = Convert.ToInt32(item["HighScore"]),
@@ -372,7 +368,6 @@ namespace ClothBackend.DAL
                 Email = Convert.ToString(item["Email"]),
                 IsControlGroup = Convert.ToBoolean(item["IsControlGroup"]),
                 FirstLogin = Convert.ToBoolean(item["FirstLogin"]),
-                CurrentPlaytrough = DBNull.Value.Equals(item["CurrentPlaytrough"]) ? null : Convert.ToInt32(item["CurrentPlaytrough"]),
                 Attempts = Convert.ToInt32(item["Attempts"]),
                 Deaths = Convert.ToInt32(item["Deaths"]),
                 HighScore = Convert.ToInt32(item["HighScore"]),
