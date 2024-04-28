@@ -32,6 +32,11 @@ namespace ClothBackend.DAL
         }
 
         #region Methods
+        internal async Task<bool> ChangePlayMode(int userId)
+        {
+            var update = await ChangePlayerControlGroup(userId);
+            return update;
+        }
         public async Task<bool> UpdateHighScore(int userId, int score)
         {
             var update = await UpdateHS(userId, score);
@@ -208,6 +213,34 @@ namespace ClothBackend.DAL
 
             return true;
         }
+
+        private async Task<bool> ChangePlayerControlGroup(int userId)
+        {
+            string query = $"SELECT * FROM Users WHERE UserId = @userId";
+            var cmd = new SqlCommand(query, con);
+            cmd.Parameters.AddWithValue("userId", userId);
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+            DataTable dataTable = new DataTable();
+            da.Fill(dataTable);
+
+            if (dataTable.Rows.Count <= 0)
+                throw new Exception("User does not exist");
+            var item = dataTable.Rows[0];
+
+
+            da.UpdateCommand = new SqlCommandBuilder(da).GetUpdateCommand();
+            item["CanNowSaveGame"] = true;
+
+
+            var rows = da.Update(dataTable);
+            if (rows != 1)
+            {
+                throw new Exception("Something went wrong");
+            }
+
+
+            return true;
+        }
         private async Task<bool> UpdateMetricsQuery(FirstLoginMetricsRequest data, User user)
         {
             string query = $"SELECT * FROM Metrics WHERE 1 = 0";
@@ -286,6 +319,7 @@ namespace ClothBackend.DAL
             item["Email"] = user?.Email ?? "";
             item["IsControlGroup"] = num % 2 == 0;
             item["FirstLogin"] = true;
+            item["CanNowSaveGame"] = false;
             item["Attempts"] = 0;
             item["Deaths"] = 0;
             item["HighScore"] = 0;
@@ -343,7 +377,7 @@ namespace ClothBackend.DAL
                 Email = Convert.ToString(item["Email"]),
                 IsControlGroup = Convert.ToBoolean(item["IsControlGroup"]),
                 FirstLogin = Convert.ToBoolean(item["FirstLogin"]),
-               
+                CanNowSaveGame = Convert.ToBoolean(item["CanNowSaveGame"]),
                 Attempts = Convert.ToInt32(item["Attempts"]),
                 Deaths = Convert.ToInt32(item["Deaths"]),
                 HighScore = Convert.ToInt32(item["HighScore"]),
@@ -367,12 +401,15 @@ namespace ClothBackend.DAL
                 Password = Convert.ToString(item["Password"]),
                 Email = Convert.ToString(item["Email"]),
                 IsControlGroup = Convert.ToBoolean(item["IsControlGroup"]),
+                CanNowSaveGame = Convert.ToBoolean(item["CanNowSaveGame"]),
                 FirstLogin = Convert.ToBoolean(item["FirstLogin"]),
                 Attempts = Convert.ToInt32(item["Attempts"]),
                 Deaths = Convert.ToInt32(item["Deaths"]),
                 HighScore = Convert.ToInt32(item["HighScore"]),
             };
         }
+
+
         #endregion
     }
 }

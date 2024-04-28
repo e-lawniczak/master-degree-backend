@@ -12,6 +12,7 @@ namespace ClothBackend.Models
         public string email { get; set; }
         public bool isControlGroup { get; set; }
         public bool firstLogin { get; set; }
+        public bool canNowSaveGame { get; set; }
         public int? currentPlaytrough { get; set; }
         public int attempts { get; set; }
         public int deaths { get; set; }

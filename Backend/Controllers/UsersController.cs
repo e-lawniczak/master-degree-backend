@@ -27,7 +27,9 @@ namespace ClothBackend.Controllers
                     firstLogin = user.FirstLogin,
                     attempts = user.Attempts,
                     deaths = user.Deaths,
-                    highScore = user.HighScore
+                    highScore = user.HighScore,
+                    canNowSaveGame = user.CanNowSaveGame,
+
                 };
 
                 return Ok(res);
@@ -54,6 +56,30 @@ namespace ClothBackend.Controllers
                 var res = await ud.UpdateMetrics(firstLogin);
 
                
+
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return new JsonResult(ex.Message + "\n" + ex.InnerException)
+                {
+                    StatusCode = 500,
+                };
+            }
+
+
+        }
+        [HttpPost]
+        [Route("changeMode")]
+        [Authorize]
+        public async Task<IActionResult> ChangeMode(ChangeMode request)
+        {
+            try
+            {
+                var ud = new UserDAL();
+                var res = await ud.ChangePlayMode(request.UserId);
+
+
 
                 return Ok(res);
             }

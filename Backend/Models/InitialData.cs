@@ -11,5 +11,6 @@ namespace ClothBackend.Models
         public int? currentPlaytrough { get; set; }
         public int highScore { get; set; }
         public bool isControlGroup { get; set; }
+        public bool canNowSaveGame { get; set; }
     }
 }

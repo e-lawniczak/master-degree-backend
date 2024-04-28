@@ -34,7 +34,9 @@ namespace ClothBackend.DAL
             return new InitialData
             {
                 highScore = u.HighScore,
-                isControlGroup = u.IsControlGroup
+                isControlGroup = u.IsControlGroup,
+                canNowSaveGame = u.CanNowSaveGame
+
             };
 
         }
