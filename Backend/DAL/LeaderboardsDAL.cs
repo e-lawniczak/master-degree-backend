@@ -28,7 +28,7 @@ namespace ClothBackend.DAL
 
         private List<Leaderboards> GenerateLeaderboard()
         {
-            string query = $"SELECT TOP 10 * FROM Users ORDER BY HighScore desc";
+            string query = $"SELECT TOP 100 * FROM Users ORDER BY HighScore desc";
             var cmd = new SqlCommand(query, con);
             SqlDataAdapter da = new SqlDataAdapter(cmd);
             DataTable dataTable = new DataTable();
