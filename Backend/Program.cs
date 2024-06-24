@@ -18,7 +18,6 @@ var open = "_openOrigins";
 
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(swg =>
@@ -59,27 +58,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(itchIo, builder =>
     {
         builder
-        //.WithOrigins(
-        //    "https://html-classic.itch.zone/",
-        //    "https://html.itch.zone",
-        //    "https://*.itch.zone",
-        //    "https://oxygen-enjoyer.itch.io"
-        //    )
+      
         .AllowAnyOrigin()
         .AllowAnyHeader()
         .AllowAnyMethod();
     });
 });
-//builder.Services.AddCors(options =>
-//{
-//    options.AddDefaultPolicy( policy => 
-//    policy
-//    //.WithOrigins("https://html-classic.itch.zone/")
-//    .AllowAnyOrigin()
-//    .AllowAnyMethod()
-//    .AllowAnyHeader()
-//    );
-//});
+
 
 builder.Services.AddDbContext<DbContext>(opt => opt.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnectionString")
